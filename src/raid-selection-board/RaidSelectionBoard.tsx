@@ -116,7 +116,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
 
   return (
       <Panel bordered header={`Raid Selection • ${raid.instance} • ${raid.date} (${raid.difficulty})`}
-             style={{marginTop: 16, background: '#ececec'}}>
+             style={{marginTop: 16}}>
         <FlexboxGrid justify="space-between" align="middle" style={{marginBottom: 8, rowGap: 8}}>
           <FlexboxGrid.Item>
             <strong>{raid.signups.length}</strong> signups
@@ -138,8 +138,8 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
               loading={loading}
           >
             <Column width={160} fixed verticalAlign="middle" fullText>
-              <HeaderCell>Character</HeaderCell>
-              <Cell>
+              <HeaderCell><b>Character</b></HeaderCell>
+              <Cell style={{background: '#ececec'}}>
                 {(rowData: RowDataShape) => {
                   const color = CLASS_COLORS[rowData.class] || '#888';
                   return (
@@ -179,7 +179,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                         const baseStyle: React.CSSProperties = selected ? {
                           fontWeight: 600
                         } : {
-                          opacity: 0.45,
+                          opacity: 0.3,
                           fontWeight: 500,
                           filter: 'grayscale(40%)'
                         };
