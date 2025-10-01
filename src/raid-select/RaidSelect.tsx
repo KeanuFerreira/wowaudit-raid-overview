@@ -49,7 +49,12 @@ export default function RaidPicker({
             try {
                 setLoading(true);
                 setError(null);
-                const resp = await fetch(url, { headers: { Accept: 'application/json', Authorization: `Bearer ${import.meta.env.VITE_WOWAUDIT_CREDENTIAL}` } });
+                const resp = await fetch(url, {
+                    headers: {
+                        Accept: 'application/json',
+                        Authorization: import.meta.env.VITE_WOWAUDIT_CREDENTIAL
+                    }
+                });
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
                 const data = await resp.json();
                 if (cancelled) return;
