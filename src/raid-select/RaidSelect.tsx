@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {SelectPicker} from 'rsuite';
-import 'rsuite/dist/rsuite.min.css';
 
 export type WowAuditRaidEvent = {
     id: number;
