@@ -25,7 +25,6 @@ interface RaidPickerProps {
 
 export default function RaidPicker({
     onChange,
-    url = 'https://wowaudit.com/v1/raids?include_past=false',
     placeholder = 'Select a raid…',
     value: controlledValue,
     disabled = false,
@@ -49,10 +48,9 @@ export default function RaidPicker({
             try {
                 setLoading(true);
                 setError(null);
-                const resp = await fetch(url, {
+                const resp = await fetch('/api/wowaudit?targetRoute=raids%3Finclude_past%3Dfalse', {
                     headers: {
                         Accept: 'application/json',
-                        Authorization: import.meta.env.VITE_WOWAUDIT_CREDENTIAL
                     }
                 });
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
@@ -75,7 +73,7 @@ export default function RaidPicker({
         return () => {
             cancelled = true;
         };
-    }, [url]);
+    }, []);
 
     // Prepare the data list for SelectPicker
     const selectData = useMemo(() => {
