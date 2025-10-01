@@ -28,6 +28,7 @@ function App() {
         // load the selected raid from /api/wowaudit?targetRoute=${encodeURIComponent(`raids/${raidId}`)}
         // @ts-ignore
         if (selectedRaid && selectedRaid.id) {
+            // @ts-ignore
             fetchRaidData(selectedRaid.id).then(data => {
                 console.log(data)
                 setSelectedRaidData(data);
