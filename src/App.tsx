@@ -23,8 +23,11 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+          <div>
+              URL: {wowaudit_url_env}
+          </div>
         <p>
-            {wowaudit_url_env}
+
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
