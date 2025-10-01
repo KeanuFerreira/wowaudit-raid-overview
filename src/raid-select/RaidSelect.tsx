@@ -31,7 +31,6 @@ export default function RaidPicker({
 }: RaidPickerProps) {
     const [events, setEvents] = useState<WowAuditRaidEvent[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [value, setValue] = useState<number | null>(controlledValue ?? null);
 
     // Sync controlled prop
@@ -47,7 +46,6 @@ export default function RaidPicker({
         (async () => {
             try {
                 setLoading(true);
-                setError(null);
                 const resp = await fetch('/api/wowaudit?targetRoute=raids%3Finclude_past%3Dfalse', {
                     headers: {
                         Accept: 'application/json',
@@ -59,12 +57,8 @@ export default function RaidPicker({
                 if (!Array.isArray(data)) {
                     setEvents([]);
                 } else {
-                    setEvents(data?.raids);
-                }
-            } catch (err) {
-                if (!cancelled) {
                     // @ts-ignore
-                    setError(err.message || 'Failed to fetch raids');
+                    setEvents(data?.raids);
                 }
             } finally {
                 if (!cancelled) setLoading(false);
