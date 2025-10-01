@@ -58,8 +58,9 @@ export default function RaidPicker({
                 } else {
                     setEvents(data);
                 }
-            } catch (err: any) {
+            } catch (err) {
                 if (!cancelled) {
+                    // @ts-ignore
                     setError(err.message || 'Failed to fetch raids');
                 }
             } finally {
