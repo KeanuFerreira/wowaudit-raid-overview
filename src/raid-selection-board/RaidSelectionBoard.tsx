@@ -2,6 +2,11 @@ import React, {useMemo} from 'react';
 import {DetailedRaidEvent, EncounterSelection, RaidSignup, Role} from '../types';
 import {Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
 
+// Import role icons
+import TankIcon from '../assets/Tank.png';
+import HealIcon from '../assets/Heal.png';
+import DamageIcon from '../assets/Damage.png';
+
 const {Column, HeaderCell, Cell} = Table;
 
 interface RaidSelectionBoardProps {
@@ -173,23 +178,38 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                         const sel: EncounterSelection | undefined = (rowData as any)[`encounter_${enc.id}`];
                         if (!sel) return <span style={{opacity: 0.25}}>—</span>;
                         const role = sel.role as Role;
-                        const abbr = ROLE_ABBR[role] || role[0];
                         const selected = sel.selected;
-                        const color = ROLE_BADGE_COLOR[role] || 'cyan';
-                        const baseStyle: React.CSSProperties = selected ? {
-                          fontWeight: 600
-                        } : {
-                          fontWeight: 500,
-                          filter: 'grayscale(40%)'
-                        };
-                        const tag = <Tag size={'md'} color={selected ? color : 'red'} style={{
-                          minWidth: 34,
-                          textAlign: 'center', ...baseStyle
-                        }}>{selected ? abbr : 'Bench'}</Tag>;
+                        if (!selected) {
+                          // Benched for this encounter
+                          return (
+                              <Whisper placement="top" trigger="hover"
+                                       speaker={<Tooltip>{role} (bench)</Tooltip>}>
+                                <Tag size="sm" color="red"
+                                     style={{minWidth: 48, textAlign: 'center', fontWeight: 600}}>Bench</Tag>
+                              </Whisper>
+                          );
+                        }
+                        // Selected: show role icon
+                        let iconSrc: string;
+                        switch (role) {
+                          case 'Tank':
+                            iconSrc = TankIcon;
+                            break;
+                          case 'Heal':
+                            iconSrc = HealIcon;
+                            break;
+                          case 'Melee':
+                          case 'Ranged':
+                          default:
+                            iconSrc = DamageIcon;
+                            break;
+                        }
+                        const img = <img src={iconSrc} alt={role}
+                                         style={{width: 28, height: 28, objectFit: 'contain'}}/>;
                         return (
                             <Whisper placement="top" trigger="hover"
-                                     speaker={<Tooltip>{role}{selected ? ' (selected)' : ' (bench)'}</Tooltip>}>
-                              {tag}
+                                     speaker={<Tooltip>{role} (selected)</Tooltip>}>
+                              {img}
                             </Whisper>
                         );
                       }}
