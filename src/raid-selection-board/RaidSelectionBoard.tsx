@@ -32,13 +32,6 @@ const CLASS_COLORS: Record<string, string> = {
   'Warrior': '#C79C6E'
 };
 
-// Replace ROLE_BADGE_COLOR to include blue for Tank
-const ROLE_BADGE_COLOR: Record<string, 'cyan' | 'violet' | 'green' | 'blue'> = {
-  'Ranged': 'cyan',
-  'Melee': 'violet',
-  'Heal': 'green',
-  'Tank': 'blue'
-};
 
 // NEW: custom sort weights -> Tank (0) -> Heal (1) -> DPS (2)
 const ROLE_SORT_WEIGHT: Record<string, number> = {
@@ -46,14 +39,6 @@ const ROLE_SORT_WEIGHT: Record<string, number> = {
   'Heal': 1,
   'Melee': 2,
   'Ranged': 3,
-};
-
-// Role abbreviation for compact encounter cells
-const ROLE_ABBR: Record<Role, string> = {
-  'Tank': 'Tank',
-  'Heal': 'Heal',
-  'Melee': 'DPS',
-  'Ranged': 'DPS'
 };
 
 // Helper removed: isCharacterSelectedForEncounter (no longer needed after storing selection objects directly)
