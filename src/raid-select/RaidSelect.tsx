@@ -92,7 +92,6 @@ export default function RaidPicker({
                 <div style={{ fontWeight: 'bold' }}>{ev.instance} ({ev.difficulty})</div>
                 <div style={{ fontSize: 12, opacity: 0.7 }}>
                     {ev.date} {ev.start_time}–{ev.end_time} | {ev.status} | {ev.present_size}/{ev.total_size}
-                    {ev.optional ? '' : ' • Required'}
                 </div>
             </div>
         );
@@ -122,8 +121,8 @@ export default function RaidPicker({
                 valueKey="value"
                 renderMenuItem={renderMenuItem}
                 renderValue={renderValue}
-                cleanable
-                searchable
+                cleanable={false}
+                searchable={false}
                 style={{ width: '100%' }}
             />
         </div>
