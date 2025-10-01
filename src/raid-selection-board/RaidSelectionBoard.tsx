@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {DetailedRaidEvent, EncounterSelection, RaidSignup, Role} from '../types';
 import {Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
 
@@ -45,10 +45,10 @@ const ROLE_SORT_WEIGHT: Record<string, number> = {
 
 // Role abbreviation for compact encounter cells
 const ROLE_ABBR: Record<Role, string> = {
-  'Tank': 'T',
-  'Heal': 'H',
-  'Melee': 'M',
-  'Ranged': 'R'
+  'Tank': 'Tank',
+  'Heal': 'Heal',
+  'Melee': 'DPS',
+  'Ranged': 'DPS'
 };
 
 // Helper removed: isCharacterSelectedForEncounter (no longer needed after storing selection objects directly)
@@ -66,8 +66,6 @@ interface RowDataShape {
 }
 
 const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = false, height}) => {
-  const [showOnlyRaidRoster, setShowOnlyRaidRoster] = useState(true);
-  const [compact, setCompact] = useState(true);
 
   const enabledEncounters = useMemo(() => raid?.encounters.filter(e => e.enabled) ?? [], [raid]);
 
@@ -104,8 +102,8 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
       return (a._origIndex ?? 0) - (b._origIndex ?? 0);
     });
 
-    return showOnlyRaidRoster ? data.filter(r => r.overallSelected) : data;
-  }, [raid, enabledEncounters, showOnlyRaidRoster]);
+    return data.filter(r => r.overallSelected);
+  }, [raid, enabledEncounters]);
 
   if (!raid) {
     return (
@@ -185,8 +183,8 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                           fontWeight: 500,
                           filter: 'grayscale(40%)'
                         };
-                        const tag = <Tag size={compact ? 'sm' : 'md'} color={color} style={{
-                          minWidth: compact ? 28 : 34,
+                        const tag = <Tag size={'md'} color={color} style={{
+                          minWidth: 34,
                           textAlign: 'center', ...baseStyle
                         }}>{abbr}</Tag>;
                         return (
