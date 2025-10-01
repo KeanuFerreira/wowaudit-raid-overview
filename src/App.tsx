@@ -1,7 +1,7 @@
 import './App.css'
 import RaidSelect, {WowAuditRaidEvent} from "./raid-select/RaidSelect.tsx";
 import {useEffect, useState} from "react";
-import 'rsuite/dist/rsuite-no-reset.min.css';
+import 'rsuite/dist/rsuite.min.css';
 import {Character, DetailedRaidEvent} from "./types.ts";
 import RaidSelectionBoard from './raid-selection-board/RaidSelectionBoard.tsx';
 import {Container, Content, Loader} from 'rsuite';
