@@ -54,7 +54,7 @@ export default function RaidPicker({
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
                 const data = await resp.json();
                 if (cancelled) return;
-                setEvents(data);
+                setEvents(data.raids);
 
             } finally {
                 if (!cancelled) setLoading(false);
