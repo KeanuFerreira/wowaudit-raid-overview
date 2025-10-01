@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Loader, Placeholder, SelectPicker} from 'rsuite';
+import {SelectPicker} from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 
 export type WowAuditRaidEvent = {
@@ -59,7 +59,7 @@ export default function RaidPicker({
                 if (!Array.isArray(data)) {
                     setEvents([]);
                 } else {
-                    setEvents(data);
+                    setEvents(data?.raids);
                 }
             } catch (err) {
                 if (!cancelled) {
@@ -136,28 +136,6 @@ export default function RaidPicker({
                 searchable
                 style={{ width: '100%' }}
             />
-            {loading && (
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        pointerEvents: 'none',
-                    }}
-                >
-                    <Loader size="sm" />
-                </div>
-            )}
-            {!loading && selectData.length === 0 && !error && (
-                <Placeholder.Paragraph rows={1} active>
-                    No upcoming raids found
-                </Placeholder.Paragraph>
-            )}
         </div>
     );
 }
