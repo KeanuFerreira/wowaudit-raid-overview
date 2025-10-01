@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { SelectPicker, Loader, Message, Placeholder } from 'rsuite';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {Loader, Placeholder, SelectPicker} from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 
 export type WowAuditRaidEvent = {
@@ -91,7 +91,7 @@ export default function RaidPicker({
     );
 
     // Custom rendering of each menu item (in dropdown)
-    const renderMenuItem = (label: React.ReactNode, item: any) => {
+    const renderMenuItem = (_label: React.ReactNode, item) => {
         const ev: WowAuditRaidEvent = item.ev;
         return (
             <div style={{ padding: '4px 8px' }}>
@@ -105,7 +105,7 @@ export default function RaidPicker({
     };
 
     // Custom rendering of selected value shown in the picker
-    const renderValue = (val: number, item: any) => {
+    const renderValue = (_val: number, item) => {
         if (!item) return null;
         const ev: WowAuditRaidEvent = item.ev;
         return (
@@ -117,9 +117,6 @@ export default function RaidPicker({
 
     return (
         <div style={{ width: '100%', position: 'relative' }}>
-            {error && (
-                <Message type="error" description={error} style={{ marginBottom: 8 }} />
-            )}
             <SelectPicker
                 data={selectData}
                 value={value ?? undefined}
