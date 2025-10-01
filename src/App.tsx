@@ -1,5 +1,5 @@
 import './App.css'
-import RaidSelect from "./raid-select/RaidSelect.tsx";
+import RaidSelect, {WowAuditRaidEvent} from "./raid-select/RaidSelect.tsx";
 import {useEffect, useState} from "react";
 
 
@@ -10,7 +10,7 @@ const fetchRaidData = async (raidId) => {
 
 function App() {
     // Access Vercel environment variables exposed via VITE_ prefix
-    const [selectedRaid, setSelectedRaid] = useState(null);
+    const [selectedRaid, setSelectedRaid] = useState<WowAuditRaidEvent | null>(null);
     const [selectedRaidData, setSelectedRaidData] = useState(null);
     const [characters, setCharacters] = useState([]);
 
@@ -26,9 +26,7 @@ function App() {
 
     useEffect(() => {
         // load the selected raid from /api/wowaudit?targetRoute=${encodeURIComponent(`raids/${raidId}`)}
-        // @ts-ignore
         if (selectedRaid && selectedRaid.id) {
-            // @ts-ignore
             fetchRaidData(selectedRaid.id).then(data => {
                 console.log(data)
                 setSelectedRaidData(data);
@@ -39,7 +37,6 @@ function App() {
     return (
         <>
             <RaidSelect
-                // @ts-ignore
                 onChange={setSelectedRaid}
             />
         </>
