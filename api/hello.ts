@@ -14,5 +14,6 @@ export async function GET(request: Request) {
     const response = await fetch("https://wowaudit.com/v1/raids?include_past=false", requestOptions);
     const result = await response?.json();
     console.log(result)
-    return new Response(result);
+    // return json
+    return new Response(JSON.stringify(result), {status: 200});
 }
