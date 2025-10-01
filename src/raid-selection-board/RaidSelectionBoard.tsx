@@ -206,8 +206,36 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
 
 export default RaidSelectionBoard;
 
-function styleForClassColor(hex: string): React.CSSProperties {
-  // If very bright (e.g. white, pale yellow, bright neon green) add a dark text shadow for contrast
-  return {fontWeight: 400, color: hex, textShadow: '1px 1px 5px #000', fontSize: '1.25em'};
+// NEW: helper to compute luminance for contrast adjustments
+function hexToRgb(hex: string): [number, number, number] | null {
+  const h = hex.replace('#', '');
+  if (h.length === 3) {
+    const r = parseInt(h[0] + h[0], 16);
+    const g = parseInt(h[1] + h[1], 16);
+    const b = parseInt(h[2] + h[2], 16);
+    return [r, g, b];
+  }
+  if (h.length === 6) {
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+  return null;
+}
 
+function relativeLuminance(hex: string): number {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return 0;
+  const [r, g, b] = rgb.map(v => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function styleForClassColor(hex: string): React.CSSProperties {
+  const lum = relativeLuminance(hex);
+  // If very bright (e.g. white, pale yellow, bright neon green) add a dark text shadow for contrast
+  if (lum > 0.8) {
+    return {fontWeight: 400, color: hex, textShadow: '1px 1px 5px #000', fontSize: '1.25em'};
+  }
+  return {fontWeight: 600, color: hex, fontSize: '1.25em'};
 }
