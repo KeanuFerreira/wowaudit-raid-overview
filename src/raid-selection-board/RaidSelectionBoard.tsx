@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {DetailedRaidEvent, EncounterSelection, RaidEncounter, RaidSignup, Role} from '../types';
+import {DetailedRaidEvent, EncounterSelection, RaidSignup, Role} from '../types';
 import {Checkbox, Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
 
 const {Column, HeaderCell, Cell} = Table;
@@ -51,12 +51,7 @@ const ROLE_ABBR: Record<Role, string> = {
   'Ranged': 'R'
 };
 
-// Helper to safely get selection status for a character within an encounter
-function isCharacterSelectedForEncounter(encounter: RaidEncounter, characterId: number): boolean {
-  if (!encounter.enabled) return false;
-  if (!encounter.selections) return false;
-  return !!encounter.selections.find(sel => sel.character_id === characterId && sel.selected);
-}
+// Helper removed: isCharacterSelectedForEncounter (no longer needed after storing selection objects directly)
 
 interface RowDataShape {
   id: number;
