@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {DetailedRaidEvent, RaidEncounter, RaidSignup} from '../types';
+import {DetailedRaidEvent, EncounterSelection, RaidEncounter, RaidSignup, Role} from '../types';
 import {Checkbox, Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
 
 const {Column, HeaderCell, Cell} = Table;
@@ -27,6 +27,7 @@ const CLASS_COLORS: Record<string, string> = {
   'Warrior': '#C79C6E'
 };
 
+// Replace ROLE_BADGE_COLOR to include blue for Tank
 const ROLE_BADGE_COLOR: Record<string, 'cyan' | 'violet' | 'green' | 'blue'> = {
   'Ranged': 'cyan',
   'Melee': 'violet',
@@ -40,6 +41,14 @@ const ROLE_SORT_WEIGHT: Record<string, number> = {
   'Heal': 1,
   'Melee': 2,
   'Ranged': 3,
+};
+
+// Role abbreviation for compact encounter cells
+const ROLE_ABBR: Record<Role, string> = {
+  'Tank': 'T',
+  'Heal': 'H',
+  'Melee': 'M',
+  'Ranged': 'R'
 };
 
 // Helper to safely get selection status for a character within an encounter
@@ -58,7 +67,7 @@ interface RowDataShape {
   overallSelected: boolean;
   signupStatus: string;
   _origIndex?: number; // internal for stable sorting
-  [key: `encounter_${number}`]: any; // allow dynamic keys
+  [key: `encounter_${number}`]: any; // will hold EncounterSelection | undefined
 }
 
 const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = false, height}) => {
@@ -82,7 +91,8 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
         _origIndex: idx,
       };
       enabledEncounters.forEach(enc => {
-        (row as any)[`encounter_${enc.id}`] = isCharacterSelectedForEncounter(enc, charId);
+        const sel = enc.selections?.find(s => s.character_id === charId);
+        (row as any)[`encounter_${enc.id}`] = sel; // store selection object (can be undefined)
       });
       return row;
     });
@@ -101,16 +111,6 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
 
     return showOnlyRaidRoster ? data.filter(r => r.overallSelected) : data;
   }, [raid, enabledEncounters, showOnlyRaidRoster]);
-
-  const encounterSelectionCounts = useMemo(() => {
-    return enabledEncounters.map(enc => {
-      let selected = 0;
-      raid?.signups.forEach(su => {
-        if (isCharacterSelectedForEncounter(enc, su.character.id)) selected++;
-      });
-      return {id: enc.id, name: enc.name, selected};
-    });
-  }, [enabledEncounters, raid]);
 
   if (!raid) {
     return (
@@ -164,7 +164,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                       <div style={{display: 'flex', flexDirection: 'column'}}>
                         <div style={styleForClassColor(color)}>{rowData.name}</div>
                         {!rowData.overallSelected && (
-                            <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
+                            <Tag size="xs" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
                         )}
                         {!compact && (
                             <span style={{fontSize: 11, opacity: 0.65}}>{rowData.fullName}</span>
@@ -174,22 +174,18 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                 }}
               </Cell>
             </Column>
-            <Column width={90} align="center" verticalAlign="middle">
-              <HeaderCell>Role</HeaderCell>
-              <Cell>
-                {(rowData: RowDataShape) => (
-                    <Tag size="sm" color={ROLE_BADGE_COLOR[rowData.role] || 'cyan'}>{rowData.role}</Tag>
-                )}
-              </Cell>
-            </Column>
+            {/* Removed overall Role column */}
             <Column width={80} align="center" verticalAlign="middle">
               <HeaderCell>Roster</HeaderCell>
               <Cell>
-                {(rowData: RowDataShape) => <SelectionPill selected={rowData.overallSelected}/>}
+                {(rowData: RowDataShape) => rowData.overallSelected ? (
+                    <Tag color="green" size="sm" style={{fontWeight: 600}}>In</Tag>
+                ) : (
+                    <Tag color="red" size="sm" style={{fontWeight: 600}}>Out</Tag>
+                )}
               </Cell>
             </Column>
-            {enabledEncounters.map((enc, idx) => {
-              const count = encounterSelectionCounts[idx]?.selected ?? 0;
+            {enabledEncounters.map((enc) => {
               const header = (
                   <div style={{display: 'flex', flexDirection: 'column', gap: 2}}>
                     <span style={{fontWeight: 600, fontSize: 12}}>{enc.name}</span>
@@ -202,10 +198,34 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                   </Whisper>
               ) : header;
               return (
-                  <Column key={enc.id} width={compact ? 90 : 110} align="center" verticalAlign="middle">
+                  <Column key={enc.id} width={compact ? 68 : 90} align="center" verticalAlign="middle">
                     <HeaderCell>{headerCell}</HeaderCell>
                     <Cell>
-                      {(rowData: RowDataShape) => <SelectionPill selected={(rowData as any)[`encounter_${enc.id}`]}/>}
+                      {(rowData: RowDataShape) => {
+                        const sel: EncounterSelection | undefined = (rowData as any)[`encounter_${enc.id}`];
+                        if (!sel) return <span style={{opacity: 0.25}}>—</span>;
+                        const role = sel.role as Role;
+                        const abbr = ROLE_ABBR[role] || role[0];
+                        const selected = sel.selected;
+                        const color = ROLE_BADGE_COLOR[role] || 'cyan';
+                        const baseStyle: React.CSSProperties = selected ? {
+                          fontWeight: 600
+                        } : {
+                          opacity: 0.45,
+                          fontWeight: 500,
+                          filter: 'grayscale(40%)'
+                        };
+                        const tag = <Tag size={compact ? 'sm' : 'md'} color={color} style={{
+                          minWidth: compact ? 28 : 34,
+                          textAlign: 'center', ...baseStyle
+                        }}>{abbr}</Tag>;
+                        return (
+                            <Whisper placement="top" trigger="hover"
+                                     speaker={<Tooltip>{role}{selected ? ' (selected)' : ' (bench)'}</Tooltip>}>
+                              {tag}
+                            </Whisper>
+                        );
+                      }}
                     </Cell>
                   </Column>
               );
@@ -250,35 +270,4 @@ function styleForClassColor(hex: string): React.CSSProperties {
     return {fontWeight: 600, color: hex, textShadow: 'rgba(0, 0, 0, 0.85) 0px 0px 1px'};
   }
   return {fontWeight: 600, color: hex};
-}
-
-function SelectionPill({selected}: { selected: boolean }) {
-  if (selected) {
-    return (
-        <span style={{
-          display: 'inline-block',
-          padding: '2px 6px',
-          background: 'linear-gradient(135deg,#1f7a33,#249b3f)',
-          color: '#fff',
-          fontSize: 12,
-          borderRadius: 6,
-          fontWeight: 600,
-          lineHeight: 1,
-          boxShadow: '0 0 0 1px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.35)'
-        }}>✔</span>
-    );
-  }
-  return (
-      <span style={{
-        display: 'inline-block',
-        padding: '2px 6px',
-        background: 'linear-gradient(135deg,#7d1a1a,#b82323)',
-        color: '#fff',
-        fontSize: 12,
-        borderRadius: 6,
-        lineHeight: 1,
-        fontWeight: 600,
-        boxShadow: '0 0 0 1px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.35)'
-      }}>✖</span>
-  );
 }
