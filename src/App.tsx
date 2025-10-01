@@ -9,7 +9,12 @@ function App() {
   // Access Vercel environment variables exposed via VITE_ prefix
   const wowauditCredential = import.meta.env.VITE_WOWAUDIT_CREDENTIAL;
   const wowauditUrl = import.meta.env.VITE_WOWAUDIT_URL;
-
+    console.log('env', {
+        VITE_WOWAUDIT_CREDENTIAL: import.meta.env.VITE_WOWAUDIT_CREDENTIAL,
+        VITE_WOWAUDIT_URL: import.meta.env.VITE_WOWAUDIT_URL,
+        MODE: import.meta.env.MODE,
+        e: import.meta.env
+    });
   return (
     <>
       <div>
