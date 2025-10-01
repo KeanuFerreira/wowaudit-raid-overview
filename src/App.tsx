@@ -6,7 +6,9 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
-    const wowaudit_url_env = __WOWAUDIT_CREDENTIAL__;
+  // Access Vercel environment variables exposed via VITE_ prefix
+  const wowauditCredential = import.meta.env.VITE_WOWAUDIT_CREDENTIAL;
+  const wowauditUrl = import.meta.env.VITE_WOWAUDIT_URL;
 
   return (
     <>
@@ -23,11 +25,13 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-          <div>
-              URL: {wowaudit_url_env}
-          </div>
+        <div>
+          Credential: {wowauditCredential}
+        </div>
+        <div>
+          URL: {wowauditUrl}
+        </div>
         <p>
-
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
