@@ -166,7 +166,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                   </Whisper>
               ) : header;
               return (
-                  <Column key={enc.id} width={90} align="center" verticalAlign="middle">
+                  <Column key={enc.id} width={100} align="center" verticalAlign="middle">
                     <HeaderCell>{headerCell}</HeaderCell>
                     <Cell>
                       {(rowData: RowDataShape) => {
@@ -179,14 +179,13 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                         const baseStyle: React.CSSProperties = selected ? {
                           fontWeight: 600
                         } : {
-                          opacity: 0.3,
                           fontWeight: 500,
                           filter: 'grayscale(40%)'
                         };
-                        const tag = <Tag size={'md'} color={color} style={{
+                        const tag = <Tag size={'md'} color={selected ? color : 'red'} style={{
                           minWidth: 34,
                           textAlign: 'center', ...baseStyle
-                        }}>{abbr}</Tag>;
+                        }}>{selected ? abbr : 'Bench'}</Tag>;
                         return (
                             <Whisper placement="top" trigger="hover"
                                      speaker={<Tooltip>{role}{selected ? ' (selected)' : ' (bench)'}</Tooltip>}>
