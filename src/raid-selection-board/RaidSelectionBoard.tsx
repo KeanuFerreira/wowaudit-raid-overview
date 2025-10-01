@@ -139,7 +139,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
           >
             <Column width={160} fixed verticalAlign="middle" fullText>
               <HeaderCell><b>Character</b></HeaderCell>
-              <Cell style={{background: '#ececec'}}>
+              <Cell>
                 {(rowData: RowDataShape) => {
                   const color = CLASS_COLORS[rowData.class] || '#888';
                   return (
@@ -235,7 +235,7 @@ function styleForClassColor(hex: string): React.CSSProperties {
   const lum = relativeLuminance(hex);
   // If very bright (e.g. white, pale yellow, bright neon green) add a dark text shadow for contrast
   if (lum > 0.6) {
-    return {fontWeight: 600, color: hex, textShadow: 'rgba(0, 0, 0, 0.85) 0px 0px 1px'};
+    return {fontWeight: 600, color: hex, textShadow: 'rgba(0, 0, 0, 0.85) 0px 0px 1px', fontSize: '1.25em'};
   }
-  return {fontWeight: 600, color: hex};
+  return {fontWeight: 600, color: hex, fontSize: '1.25em'};
 }
