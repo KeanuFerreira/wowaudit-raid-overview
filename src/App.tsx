@@ -27,12 +27,14 @@ function App() {
     useEffect(() => {
         // load the selected raid from /api/wowaudit?targetRoute=${encodeURIComponent(`raids/${raidId}`)}
         // @ts-ignore
-        fetchRaidData(selectedRaid.id).then(data => {
-            console.log(data)
-            setSelectedRaidData(data);
-        })
+        if (selectedRaid && selectedRaid.id) {
+            fetchRaidData(selectedRaid.id).then(data => {
+                console.log(data)
+                setSelectedRaidData(data);
+            })
+        }
     }, [selectedRaid]);
-    console.log(selectedRaidData, characters)
+    console.log({selectedRaid, selectedRaidData, characters})
     return (
         <>
             <RaidSelect
