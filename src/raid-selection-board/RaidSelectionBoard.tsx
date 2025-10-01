@@ -148,7 +148,6 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                         {!rowData.overallSelected && (
                             <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
                         )}
-                        <span style={{fontSize: 11, opacity: 0.65}}>{rowData.fullName}</span>
                       </div>
                   );
                 }}
