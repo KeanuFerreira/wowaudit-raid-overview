@@ -41,8 +41,6 @@ const ROLE_SORT_WEIGHT: Record<string, number> = {
   'Ranged': 3,
 };
 
-// Helper removed: isCharacterSelectedForEncounter (no longer needed after storing selection objects directly)
-
 interface RowDataShape {
   id: number;
   name: string;
@@ -52,7 +50,7 @@ interface RowDataShape {
   overallSelected: boolean;
   signupStatus: string;
   _origIndex?: number; // internal for stable sorting
-  [key: `encounter_${number}`]: any; // will hold EncounterSelection | undefined
+  encounterSelections: Record<number, EncounterSelection | undefined>;
 }
 
 const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = false, height}) => {
@@ -72,10 +70,10 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
         overallSelected: signup.selected,
         signupStatus: signup.status,
         _origIndex: idx,
+        encounterSelections: {}
       };
       enabledEncounters.forEach(enc => {
-        const sel = enc.selections?.find(s => s.character_id === charId);
-        (row as any)[`encounter_${enc.id}`] = sel; // store selection object (can be undefined)
+        row.encounterSelections[enc.id] = enc.selections?.find(s => s.character_id === charId);
       });
       return row;
     });
@@ -98,8 +96,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
   if (!raid) {
     return (
         <Panel bordered header="Raid Selection">
-          {loading ? <Placeholder.Paragraph rows={4}/> : <Placeholder.Paragraph rows={3}/>}
-          <span style={{opacity: 0.6}}>Select a raid to view its encounter selection matrix.</span>
+          {loading ? <Placeholder.Paragraph rows={4}/> : <Placeholder.Paragraph rows={3}/>}<span style={{opacity: 0.6}}>Select a raid to view its encounter selection matrix.</span>
         </Panel>
     );
   }
@@ -160,7 +157,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                     <HeaderCell>{headerCell}</HeaderCell>
                     <Cell>
                       {(rowData: RowDataShape) => {
-                        const sel: EncounterSelection | undefined = (rowData as any)[`encounter_${enc.id}`];
+                        const sel = rowData.encounterSelections[enc.id];
                         if (!sel) return <span style={{opacity: 0.25}}>—</span>;
                         const role = sel.role as Role;
                         const selected = sel.selected;
