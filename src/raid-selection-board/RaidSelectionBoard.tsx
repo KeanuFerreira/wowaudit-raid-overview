@@ -18,10 +18,10 @@ const CLASS_COLORS: Record<string, string> = {
   'Evoker': '#33937F',
   'Hunter': '#ABD473',
   'Mage': '#3FC7EB',
-  'Monk': '#00FF96',
+  'Monk': '#00d57f',
   'Paladin': '#F58CBA',
   'Priest': '#FFFFFF',
-  'Rogue': '#FFF569',
+  'Rogue': '#d2c350',
   'Shaman': '#0070DE',
   'Warlock': '#8788EE',
   'Warrior': '#C79C6E'
