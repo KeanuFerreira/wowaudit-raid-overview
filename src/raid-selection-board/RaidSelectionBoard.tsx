@@ -27,19 +27,19 @@ const CLASS_COLORS: Record<string, string> = {
   'Warrior': '#C79C6E'
 };
 
-const ROLE_BADGE_COLOR: Record<string, 'cyan' | 'violet' | 'green' | 'red'> = {
+const ROLE_BADGE_COLOR: Record<string, 'cyan' | 'violet' | 'green' | 'blue'> = {
   'Ranged': 'cyan',
   'Melee': 'violet',
   'Heal': 'green',
-  'Tank': 'red'
+  'Tank': 'blue'
 };
 
 // NEW: custom sort weights -> Tank (0) -> Heal (1) -> DPS (2)
 const ROLE_SORT_WEIGHT: Record<string, number> = {
   'Tank': 0,
   'Heal': 1,
-  'Ranged': 2,
   'Melee': 2,
+  'Ranged': 3,
 };
 
 // Helper to safely get selection status for a character within an encounter
@@ -193,7 +193,6 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
               const header = (
                   <div style={{display: 'flex', flexDirection: 'column', gap: 2}}>
                     <span style={{fontWeight: 600, fontSize: 12}}>{enc.name}</span>
-                    <span style={{fontSize: 11, opacity: 0.7}}>{count} sel.</span>
                   </div>
               );
               const headerCell = enc.notes ? (
@@ -247,8 +246,8 @@ function relativeLuminance(hex: string): number {
 function styleForClassColor(hex: string): React.CSSProperties {
   const lum = relativeLuminance(hex);
   // If very bright (e.g. white, pale yellow, bright neon green) add a dark text shadow for contrast
-  if (lum > 0.7) {
-    return {fontWeight: 600, color: hex, textShadow: '0 0 2px rgba(0,0,0,0.85), 0 0 1px rgba(0,0,0,0.75)'};
+  if (lum > 0.6) {
+    return {fontWeight: 600, color: hex, textShadow: 'rgba(0, 0, 0, 0.85) 0px 0px 1px'};
   }
   return {fontWeight: 600, color: hex};
 }
