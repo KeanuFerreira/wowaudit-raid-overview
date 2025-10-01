@@ -159,7 +159,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                       <div style={{display: 'flex', flexDirection: 'column'}}>
                         <div style={styleForClassColor(color)}>{rowData.name}</div>
                         {!rowData.overallSelected && (
-                            <Tag size="xs" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
+                            <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
                         )}
                         {!compact && (
                             <span style={{fontSize: 11, opacity: 0.65}}>{rowData.fullName}</span>
@@ -167,17 +167,6 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                       </div>
                   );
                 }}
-              </Cell>
-            </Column>
-            {/* Removed overall Role column */}
-            <Column width={80} align="center" verticalAlign="middle">
-              <HeaderCell>Roster</HeaderCell>
-              <Cell>
-                {(rowData: RowDataShape) => rowData.overallSelected ? (
-                    <Tag color="green" size="sm" style={{fontWeight: 600}}>In</Tag>
-                ) : (
-                    <Tag color="red" size="sm" style={{fontWeight: 600}}>Out</Tag>
-                )}
               </Cell>
             </Column>
             {enabledEncounters.map((enc) => {
