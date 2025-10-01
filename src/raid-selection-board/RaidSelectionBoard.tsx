@@ -146,7 +146,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                       <div style={{display: 'flex', flexDirection: 'column'}}>
                         <div className="raid-char-name" style={styleForClassColor(color)}>{rowData.name}</div>
                         {!rowData.overallSelected && (
-                            <Tag size="xs" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
+                            <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
                         )}
                         <span style={{fontSize: 11, opacity: 0.65}}>{rowData.fullName}</span>
                       </div>
