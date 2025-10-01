@@ -6,7 +6,7 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
-    const wowaudit_url_env = import.meta.env.WOWAUDIT_URL;
+    const wowaudit_url_env = __WOWAUDIT_CREDENTIAL__;
 
   return (
     <>
