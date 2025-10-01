@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import {DetailedRaidEvent, EncounterSelection, RaidSignup, Role} from '../types';
-import {Checkbox, Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
+import {Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
 
 const {Column, HeaderCell, Cell} = Table;
 
@@ -118,22 +118,11 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
 
   return (
       <Panel bordered header={`Raid Selection • ${raid.instance} • ${raid.date} (${raid.difficulty})`}
-             style={{marginTop: 16}}>
+             style={{marginTop: 16, background: '#ececec'}}>
         <FlexboxGrid justify="space-between" align="middle" style={{marginBottom: 8, rowGap: 8}}>
           <FlexboxGrid.Item>
             <strong>{raid.signups.length}</strong> signups
             • <strong>{raid.signups.filter(s => s.selected).length}</strong> in raid roster
-          </FlexboxGrid.Item>
-          <FlexboxGrid.Item>
-            <div style={{display: 'flex', gap: 16, flexWrap: 'wrap'}}>
-              <Checkbox checked={showOnlyRaidRoster}
-                        onChange={(_, checked) => setShowOnlyRaidRoster(checked)}>
-                Only raid roster
-              </Checkbox>
-              <Checkbox checked={compact} onChange={(_, checked) => setCompact(checked)}>
-                Compact
-              </Checkbox>
-            </div>
           </FlexboxGrid.Item>
         </FlexboxGrid>
         <Divider style={{margin: '8px 0'}}/>
@@ -142,7 +131,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
               data={rows}
               autoHeight={!height}
               height={height}
-              rowHeight={compact ? 32 : 44}
+              rowHeight={32}
               headerHeight={56}
               bordered
               cellBordered
@@ -150,7 +139,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
               affixHeader
               loading={loading}
           >
-            <Column width={compact ? 160 : 200} fixed verticalAlign="middle" fullText>
+            <Column width={160} fixed verticalAlign="middle" fullText>
               <HeaderCell>Character</HeaderCell>
               <Cell>
                 {(rowData: RowDataShape) => {
@@ -160,9 +149,6 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                         <div style={styleForClassColor(color)}>{rowData.name}</div>
                         {!rowData.overallSelected && (
                             <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
-                        )}
-                        {!compact && (
-                            <span style={{fontSize: 11, opacity: 0.65}}>{rowData.fullName}</span>
                         )}
                       </div>
                   );
@@ -182,7 +168,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                   </Whisper>
               ) : header;
               return (
-                  <Column key={enc.id} width={compact ? 68 : 90} align="center" verticalAlign="middle">
+                  <Column key={enc.id} width={90} align="center" verticalAlign="middle">
                     <HeaderCell>{headerCell}</HeaderCell>
                     <Cell>
                       {(rowData: RowDataShape) => {

@@ -54,6 +54,10 @@ export default function RaidPicker({
                 const data = await resp.json();
                 if (cancelled) return;
                 setEvents(data.raids);
+                // initially select next mythic raid
+                const nextMythicRaid = data.raids.find(raid => raid.difficulty === 'Mythic')
+                setValue(nextMythicRaid)
+                onChange?.(nextMythicRaid)
 
             } finally {
                 if (!cancelled) setLoading(false);
