@@ -235,7 +235,7 @@ function styleForClassColor(hex: string): React.CSSProperties {
   const lum = relativeLuminance(hex);
   // If very bright (e.g. white, pale yellow, bright neon green) add a dark text shadow for contrast
   if (lum > 0.6) {
-    return {fontWeight: 600, color: hex, WebkitTextStroke: '1px', fontSize: '1.25em'};
+    return {fontWeight: 600, color: hex, textShadow: '1px 1px 5px #000', fontSize: '1.25em'};
   }
   return {fontWeight: 600, color: hex, fontSize: '1.25em'};
 }
