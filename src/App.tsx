@@ -6,6 +6,8 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
 
+    const wowaudit_url_env = import.meta.env.WOWAUDIT_URL;
+
   return (
     <>
       <div>
@@ -22,6 +24,7 @@ function App() {
           count is {count}
         </button>
         <p>
+            {wowaudit_url_env}
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
