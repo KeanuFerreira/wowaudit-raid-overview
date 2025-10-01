@@ -144,10 +144,11 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                   const color = CLASS_COLORS[rowData.class] || '#888';
                   return (
                       <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <div style={styleForClassColor(color)}>{rowData.name}</div>
+                        <div className="raid-char-name" style={styleForClassColor(color)}>{rowData.name}</div>
                         {!rowData.overallSelected && (
-                            <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
+                            <Tag size="xs" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
                         )}
+                        <span style={{fontSize: 11, opacity: 0.65}}>{rowData.fullName}</span>
                       </div>
                   );
                 }}
@@ -233,7 +234,14 @@ function relativeLuminance(hex: string): number {
 
 function styleForClassColor(hex: string): React.CSSProperties {
   const lum = relativeLuminance(hex);
-  // If very bright (e.g. white, pale yellow, bright neon green) add a dark text shadow for contrast
+  const isDark = typeof document !== 'undefined' && document.body.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    // On dark background, brighten very dark colors slightly and keep bright colors vivid with subtle glow
+    if (lum < 0.25) {
+      return {fontWeight: 600, color: hex, filter: 'brightness(1.25)'};
+    }
+    return {fontWeight: 600, color: hex};
+  }
   if (lum > 0.8) {
     return {fontWeight: 400, color: hex, textShadow: '1px 1px 5px #000', fontSize: '1.25em'};
   }

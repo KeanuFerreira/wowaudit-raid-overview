@@ -2,9 +2,11 @@ import './App.css'
 import RaidSelect, {WowAuditRaidEvent} from "./raid-select/RaidSelect.tsx";
 import {useEffect, useState} from "react";
 import 'rsuite/dist/rsuite.min.css';
+import './theme.css';
 import {Character, DetailedRaidEvent} from "./types.ts";
 import RaidSelectionBoard from './raid-selection-board/RaidSelectionBoard.tsx';
-import {Container, Content, Loader} from 'rsuite';
+import {Container, Content, CustomProvider, Loader, Toggle} from 'rsuite';
+import {applyTheme, initTheme, rsuiteTheme, ThemeMode} from './theme';
 
 const fetchRaidData = async (raidId) => {
     return fetch(`/api/wowaudit?targetRoute=${encodeURIComponent(`raids/${raidId}`)}`)
@@ -17,6 +19,14 @@ function App() {
     const [selectedRaidData, setSelectedRaidData] = useState<DetailedRaidEvent | null>(null);
     const [characters, setCharacters] = useState<Character[]>([]);
     const [raidLoading, setRaidLoading] = useState(false);
+    const [theme, setTheme] = useState<ThemeMode>(() => (typeof document !== 'undefined' ? initTheme() : 'light'));
+
+    const switchTheme = (next: boolean) => {
+        const t: ThemeMode = next ? 'dark' : 'light';
+        setTheme(t);
+        applyTheme(t);
+    };
+
     console.log(characters)
     useEffect(() => {
         // load all characters from /api/wowaudit?targetRoute=${encodeURIComponent('characters')}
@@ -46,19 +56,27 @@ function App() {
     }, [selectedRaid]);
 
     return (
-        <Container style={{padding: 24, maxWidth: 1400, margin: '0 auto'}}>
-            <Content>
-                <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
-                    <RaidSelect onChange={setSelectedRaid}/>
-                    {selectedRaid && raidLoading && !selectedRaidData && (
-                        <div style={{padding: 32, textAlign: 'center'}}>
-                            <Loader size="md" content="Loading raid details..."/>
+        <CustomProvider theme={rsuiteTheme(theme)}>
+            <Container style={{padding: 24, maxWidth: 1400, margin: '0 auto'}}>
+                <Content>
+                    <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+                        <div style={{display: 'flex', alignItems: 'center', gap: 16}}>
+                            <div style={{flex: 1}}>
+                                <RaidSelect onChange={setSelectedRaid}/>
+                            </div>
+                            <Toggle checked={theme === 'dark'} onChange={switchTheme} checkedChildren="Dark"
+                                    unCheckedChildren="Light"/>
                         </div>
-                    )}
-                    <RaidSelectionBoard raid={selectedRaidData} loading={raidLoading}/>
-                </div>
-            </Content>
-        </Container>
+                        {selectedRaid && raidLoading && !selectedRaidData && (
+                            <div style={{padding: 32, textAlign: 'center'}}>
+                                <Loader size="md" content="Loading raid details..."/>
+                            </div>
+                        )}
+                        <RaidSelectionBoard raid={selectedRaidData} loading={raidLoading}/>
+                    </div>
+                </Content>
+            </Container>
+        </CustomProvider>
     )
 }
 

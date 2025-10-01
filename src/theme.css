@@ -1,0 +1,22 @@
+body[data-theme='dark'] ::-webkit-scrollbar-thumb {
+    background: #2e2e2e;
+    border-radius: 6px;
+}
+
+body[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+}
+
+/* Light mode small refinement */
+body[data-theme='light'] .rs-tag-red {
+    background: #ffe2e2;
+}
+
+body[data-theme='light'] .rs-tag-green {
+    background: #e1f8e9;
+}
+
+/* Selection emphasis */
+body[data-theme='dark'] .raid-char-name {
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.85);
+}
