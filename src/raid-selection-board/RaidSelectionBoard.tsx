@@ -163,7 +163,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                   const color = CLASS_COLORS[rowData.class] || '#888';
                   const iconSrc = CLASS_ICONS[rowData.class];
                   return (
-                      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                      <div style={{display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'center'}}>
                         <Image src={iconSrc} alt={rowData.class} width={28} height={28} circle
                                style={{objectFit: 'contain', marginBottom: 2}}/>
                         <div className="raid-char-name" style={styleForClassColor(color)}>{rowData.name}</div>
