@@ -1,11 +1,43 @@
 import React, {useMemo} from 'react';
 import {DetailedRaidEvent, EncounterSelection, RaidSignup, Role} from '../types';
-import {Divider, FlexboxGrid, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
+import {Divider, FlexboxGrid, Image, Panel, Placeholder, Table, Tag, Tooltip, Whisper} from 'rsuite';
 
 // Import role icons
-import TankIcon from '../assets/Tank.png';
-import HealIcon from '../assets/Heal.png';
-import DamageIcon from '../assets/Damage.png';
+import TankIcon from '../assets/tank.svg';
+import HealIcon from '../assets/healer.svg';
+import MDPSIcon from '../assets/mdps.svg';
+import RDPSIcon from '../assets/rdps.svg';
+
+import deathknightIcon from '../assets/deathknight.png';
+import demonhunterIcon from '../assets/demonhunter.png';
+import druidIcon from '../assets/druid.png';
+import evokerIcon from '../assets/evoker.png';
+import hunterIcon from '../assets/hunter.png';
+import mageIcon from '../assets/mage.png';
+import monkIcon from '../assets/monk.png';
+import paladinIcon from '../assets/paladin.png';
+import priestIcon from '../assets/priest.png';
+import rogueIcon from '../assets/rogue.png';
+import shamanIcon from '../assets/shaman.png';
+import warlockIcon from '../assets/warlock.png';
+import warriorIcon from '../assets/warrior.png';
+
+// Add class icon mapping immediately after imports
+const CLASS_ICONS: Record<string, string> = {
+  'Death Knight': deathknightIcon,
+  'Demon Hunter': demonhunterIcon,
+  'Druid': druidIcon,
+  'Evoker': evokerIcon,
+  'Hunter': hunterIcon,
+  'Mage': mageIcon,
+  'Monk': monkIcon,
+  'Paladin': paladinIcon,
+  'Priest': priestIcon,
+  'Rogue': rogueIcon,
+  'Shaman': shamanIcon,
+  'Warlock': warlockIcon,
+  'Warrior': warriorIcon,
+};
 
 const {Column, HeaderCell, Cell} = Table;
 
@@ -124,17 +156,17 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
               affixHeader
               loading={loading}
           >
-            <Column width={160} fixed verticalAlign="middle" fullText>
+            <Column width={200} fixed verticalAlign="middle" fullText>
               <HeaderCell><b>Character</b></HeaderCell>
               <Cell>
                 {(rowData: RowDataShape) => {
                   const color = CLASS_COLORS[rowData.class] || '#888';
+                  const iconSrc = CLASS_ICONS[rowData.class];
                   return (
-                      <div style={{display: 'flex', flexDirection: 'column'}}>
+                      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                        <Image src={iconSrc} alt={rowData.class} width={28} height={28} circle
+                               style={{objectFit: 'contain', marginBottom: 2}}/>
                         <div className="raid-char-name" style={styleForClassColor(color)}>{rowData.name}</div>
-                        {!rowData.overallSelected && (
-                            <Tag size="sm" color="red" style={{alignSelf: 'flex-start', marginTop: 2}}>Bench</Tag>
-                        )}
                       </div>
                   );
                 }}
@@ -181,9 +213,11 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
                             iconSrc = HealIcon;
                             break;
                           case 'Melee':
+                            iconSrc = MDPSIcon;
+                            break;
                           case 'Ranged':
                           default:
-                            iconSrc = DamageIcon;
+                            iconSrc = RDPSIcon;
                             break;
                         }
                         const img = <img src={iconSrc} alt={role}
