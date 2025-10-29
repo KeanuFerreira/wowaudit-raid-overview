@@ -124,7 +124,6 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
 
     return data.filter((char) => Object.values(char.encounterSelections).some(sel => sel?.selected))
   }, [raid, enabledEncounters]);
-  console.log(rows)
   if (!raid) {
     return (
         <Panel bordered header="Raid Selection">
