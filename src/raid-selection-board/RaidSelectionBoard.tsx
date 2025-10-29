@@ -122,7 +122,7 @@ const RaidSelectionBoard: React.FC<RaidSelectionBoardProps> = ({raid, loading = 
       return (a._origIndex ?? 0) - (b._origIndex ?? 0);
     });
 
-    return data.filter(r => r.overallSelected);
+    return data.filter((char) => Object.values(char.encounterSelections).some(sel => sel?.selected))
   }, [raid, enabledEncounters]);
   console.log(rows)
   if (!raid) {
